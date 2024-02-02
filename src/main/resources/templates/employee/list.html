@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Employees Table</h2>
+         <div class="mb-3">
+            <a th:href="@{/employee/showFormForAdd}" class="btn btn-primary">Add Employee</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over user data and populate the table -->
+                <tdtr th:each="user : ${listEmployees}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td> <a th:href="@{/employee/showFormForUpdate(employeeId=${user.id})}" 
+                    	class="btn btn-info btn-sm"> Update </a> 
+                     <a th:href="@{/employee/showFormForDelete(employeeId=${user.id})}" 
+                    	class="btn btn-danger btn-sm"> Delete </a> </td>
+                </tr>
+            </tbody>
+        </table>
+         <!-- Pagination -->
+        <nav aria-label="Employee pagination d-flex flex-row">
+        <ul class="pagination"> 
+        <div class="d-flex flex-row" th:if="${totalPages>1}">
+				<li class="page-item">
+					<span class="page-link">Total Rows:[[${totalItems}]] </span>
+				</li>
+				<li class="page-item d-flex flex-row">
+					<span th:each="i:${#numbers.sequence(1,totalPages)}">
+						<a class="page-link" th:if="${currentPage!=i}" th:href="@{'/employee/page/' + ${i}}">[[${i}]]</a>
+						<span class="page-link" th:unless="${currentPage!=i}">[[${i}]]</span> 
+					</span>
+				</li>
+				<li class="page-item">
+					<a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/employee/page/' + ${currentPage+1}}">Next</a>
+					<span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+				</li>
+				<li class="page-item">
+					<a  class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/employee/page/' + ${totalPages}}"> Last </a>
+					<span class="page-link" th:unless="${currentPage < totalPages}">Last</span>
+				</li>
+			</div>
+        </ul>
+       </nav>
+    </div>
+    <!-- Bootstrap JS (Optional, if needed) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
